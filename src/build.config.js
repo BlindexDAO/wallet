@@ -22,7 +22,10 @@ export default {
       'ARBETH',
       'FISH',
       'LUNA',
-      'UST'
+      'UST',
+      'BDX',
+      'BDUS',
+      'BDEU'
     ],
     testnet: [
       'BTC',
@@ -138,6 +141,12 @@ export default {
         icon: 'thorchain.svg',
         type: SwapProviderType.THORCHAIN,
         thornode: 'https://thornode.thorchain.info'
+      },
+      blindex: {
+        name: 'Blindex',
+        icon: 'blindex.svg',
+        type: SwapProviderType.BLINDEX,
+        routerAddress: '0x102692AbBAB9a1AA75AA78Fff6E23f6ea7b84f61'
       }
     }
   },

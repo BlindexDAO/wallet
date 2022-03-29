@@ -171,7 +171,7 @@ describe('Import wallet-["MAINNET"]', async () => {
     ).equals(ethAddress)
 
     // Check RSK & ERC20 tokens
-    const rskTokens = ['RBTC', 'SOV', 'FISH']
+    const rskTokens = ['RBTC', 'SOV', 'FISH', 'BDX', 'BDUS', 'BDEU']
     if (process.env.NODE_ENV === 'mainnet') {
       await page.click('#RSK')
       for (let i = 0; i < rskTokens.length; i++) {

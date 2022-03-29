@@ -199,6 +199,9 @@ class OverviewPage {
 
       case 'SOV':
       case 'FISH':
+      case 'BDX':
+      case 'BDUS':
+      case 'BDEU':
       case 'RBTC': {
         const rsk = await page.waitForSelector('#RSK', {
           timeout: elementVisibleTimeout,

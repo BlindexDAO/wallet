@@ -6,6 +6,7 @@ import { OneinchSwapProvider } from '@/swaps/oneinch/OneinchSwapProvider'
 import { ThorchainSwapProvider } from '@/swaps/thorchain/ThorchainSwapProvider'
 import { FastbtcSwapProvider } from '@/swaps/fastbtc/FastbtcSwapProvider'
 import { SovrynSwapProvider } from '@/swaps/sovryn/SovrynSwapProvider'
+import { BlindexSwapProvider } from '@/swaps/blindex/BlindexSwapProvider'
 import buildConfig from '@/build.config'
 
 const providers = {
@@ -15,7 +16,8 @@ const providers = {
   [SwapProviderType.THORCHAIN]: ThorchainSwapProvider,
   [SwapProviderType.LIQUALITYBOOST]: LiqualityBoostSwapProvider,
   [SwapProviderType.FASTBTC]: FastbtcSwapProvider,
-  [SwapProviderType.SOVRYN]: SovrynSwapProvider
+  [SwapProviderType.SOVRYN]: SovrynSwapProvider,
+  [SwapProviderType.BLINDEX]: BlindexSwapProvider
 }
 
 export const createSwapProvider = (network, providerId) => {
