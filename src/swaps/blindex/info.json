@@ -1,7 +1,7 @@
 {
   "title": "Blindex AMM Swaps",
-  "description": "Popular DEX for Ethereum tokens only.",
+  "description": "Popular DEX for ERC20 tokens.",
   "pros": ["High liquidity", "Many pairs", "Fast"],
-  "cons": ["Slippage", "Ethereum tokens only", "Few pairs"],
-  "fees": ["0.3% liquidity provider fee", "Slippage (up to 2% in Liquality)"]
+  "cons": ["ERC20 tokens only"],
+  "fees": ["0.3% liquidity provider fee"]
 }
