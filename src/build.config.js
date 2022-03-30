@@ -25,7 +25,9 @@ export default {
       'UST',
       'BDX',
       'BDUS',
-      'BDEU'
+      'BDEU',
+      'XUSD',
+      'ETHs'
     ],
     testnet: [
       'BTC',

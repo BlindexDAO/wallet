@@ -202,6 +202,8 @@ class OverviewPage {
       case 'BDX':
       case 'BDUS':
       case 'BDEU':
+      case 'XUSD':
+      case 'ETHs':
       case 'RBTC': {
         const rsk = await page.waitForSelector('#RSK', {
           timeout: elementVisibleTimeout,
