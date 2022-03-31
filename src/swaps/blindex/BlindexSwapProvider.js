@@ -20,6 +20,7 @@ import { blindexConfig } from './BlindexConfig'
 const SWAP_DEADLINE = 30 * 60 // 30 minutes
 const DECIMALS = 18
 const RSK_RPC_URL = 'https://public-node.rsk.co'
+const SLIPPAGE = 200 // 2%
 
 class BlindexSwapProvider extends SwapProvider {
   constructor(config) {
@@ -28,7 +29,7 @@ class BlindexSwapProvider extends SwapProvider {
     this.bestRouteService = new BestRouteService()
     this.wrbtcAddress = blindexConfig.ERC20_INFO.find((x) => x.symbol === 'WRBTC').address
     this.nativeTokenSymbol = chains[ChainId.Rootstock].nativeAsset //RBTC
-    this.availableTokenSymbols = blindexConfig.ERC20_INFO.filter((entry) => entry !== 'UNI-V2').map(
+    this.availableTokenSymbols = blindexConfig.ERC20_INFO.map(
       (entry) => (entry.symbol === 'WRBTC' ? this.nativeTokenSymbol : entry.symbol)
     )
   }
@@ -65,7 +66,7 @@ class BlindexSwapProvider extends SwapProvider {
   }
 
   getMinimumOutput(outputAmount) {
-    const slippageTolerance = new Percent('200', '10000') // 2%
+    const slippageTolerance = new Percent(SLIPPAGE, '10000') // 2%
     const slippageAdjustedAmountOut = new Fraction(JSBI.BigInt(1))
       .add(slippageTolerance)
       .invert()
@@ -95,7 +96,6 @@ class BlindexSwapProvider extends SwapProvider {
       network,
       to,
       amount,
-      false,
       fromContractAddress,
       toContractAddress
     )
@@ -122,7 +122,7 @@ class BlindexSwapProvider extends SwapProvider {
     return {
       id: uuidv4(),
       fee: quote.fee,
-      slippage: 200,
+      slippage: SLIPPAGE,
       ...updates
     }
   }
@@ -413,7 +413,7 @@ class BlindexSwapProvider extends SwapProvider {
     return updates
   }
 
-  async calcBestRoute(network, to, amount, invokeGetAmountsIn, leftToken, rightToken) {
+  async calcBestRoute(network, to, amount, leftToken, rightToken) {
     if (!leftToken || !rightToken || !parseFloat(amount)) {
       this.bestRoute = []
       return undefined
@@ -425,7 +425,6 @@ class BlindexSwapProvider extends SwapProvider {
     const bestRoute = await this.bestRouteService.getBestRoute(
       router,
       amount_d18,
-      invokeGetAmountsIn,
       leftToken,
       rightToken
     )

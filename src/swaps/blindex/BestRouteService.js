@@ -4,43 +4,31 @@ export class BestRouteService {
   availableLinks = []
 
   constructor() {
-    const availableLinks = []
-
     for (const pair of blindexConfig.SWAPS) {
-      availableLinks.push({ from: pair.token0.toLowerCase(), to: pair.token1.toLowerCase() })
-      availableLinks.push({ from: pair.token1.toLowerCase(), to: pair.token0.toLowerCase() })
+      this.availableLinks.push({ from: pair.token0, to: pair.token1 })
+      this.availableLinks.push({ from: pair.token1, to: pair.token0 })
     }
-
-    this.availableLinks = availableLinks
   }
 
-  async getBestRoute(router, amount, invokeGetAmountsIn, leftTokenAddress, rightTokenAddress) {
+  async getBestRoute(router, amount, leftTokenAddress, rightTokenAddress) {
     const allRoutes = await this.generateRoutes(leftTokenAddress, rightTokenAddress)
     const allRoutesWithAmounts = await this.getRoutesWithAmount(
       router,
       allRoutes,
-      amount,
-      invokeGetAmountsIn
+      amount
     )
-    const bestRoute = await this.chooseBestRoute(allRoutesWithAmounts, invokeGetAmountsIn)
+    const bestRoute = await this.chooseBestRoute(allRoutesWithAmounts)
     return bestRoute
   }
 
-  async getRoutesWithAmount(router, routes, amount, invokeGetAmountsIn) {
+  async getRoutesWithAmount(router, routes, amount) {
     const routesPrices = []
     for (const route of routes) {
-      let amounts
-      try {
-        amounts = invokeGetAmountsIn
-          ? await router.getAmountsIn(amount, route)
-          : await router.getAmountsOut(amount, route)
-      } catch (e) {
-        continue // handle unsupported paths like [wrbtc -> eths -> bdx]
-      }
+      const amounts = await router.getAmountsOut(amount, route)
 
       routesPrices.push({
         route: route,
-        finalAmount: invokeGetAmountsIn ? amounts[0] : amounts[amounts.length - 1],
+        finalAmount: amounts[amounts.length - 1],
         amounts: amounts
       })
     }
@@ -50,42 +38,31 @@ export class BestRouteService {
 
   async generateRoutes(addressIn, addressOut) {
     const midTokens = []
-    addressIn = addressIn.toLowerCase()
-    addressOut = addressOut.toLowerCase()
+    const addressInLowercase = addressIn.toLowerCase()
+    const addressOutLowercase = addressOut.toLowerCase()
     for (const link1 of this.availableLinks) {
-      if (link1.from !== addressIn) {
-        continue
-      }
-      for (const link2 of this.availableLinks) {
-        if (link1.to !== link2.from) {
-          continue
+      if (link1.from.toLowerCase() === addressInLowercase) {
+        for (const link2 of this.availableLinks) {
+          if (link1.to.toLowerCase() === link2.from.toLowerCase() && link2.to.toLowerCase() === addressOutLowercase) {
+              midTokens.push(link1.to.toLowerCase())
+          }
         }
-        if (link2.to !== addressOut) {
-          continue
-        }
-
-        midTokens.push(link1.to)
       }
     }
-    const routes = [...midTokens.map((x) => [addressIn, x, addressOut])]
-    if (this.availableLinks.some((link) => link.from === addressIn && link.to === addressOut)) {
-      routes.push([addressIn, addressOut])
+    const routes = [...midTokens.map((x) => [addressInLowercase, x, addressOutLowercase])]
+    if (this.availableLinks.some((link) => link.from === addressInLowercase && link.to === addressOutLowercase)) {
+      routes.push([addressInLowercase, addressOutLowercase])
     }
 
     return routes
   }
 
-  async chooseBestRoute(allRoutesWithAmounts, invokeGetAmountsIn) {
+  async chooseBestRoute(allRoutesWithAmounts) {
     const bestPath = allRoutesWithAmounts.reduce((prev, current) => {
-      const selectedRouteInfo = invokeGetAmountsIn
-        ? prev.finalAmount.lt(current.finalAmount) ||
-          (prev.finalAmount.eq(current.finalAmount) && prev.route.length < current.route.length)
-          ? prev
-          : current
-        : prev.finalAmount.gt(current.finalAmount) ||
-          (prev.finalAmount.eq(current.finalAmount) && prev.route.length < current.route.length)
-        ? prev
-        : current
+      const selectedRouteInfo = prev.finalAmount.gt(current.finalAmount) ||
+        (prev.finalAmount.eq(current.finalAmount) && prev.route.length < current.route.length)
+      ? prev
+      : current
 
       return selectedRouteInfo
     })
