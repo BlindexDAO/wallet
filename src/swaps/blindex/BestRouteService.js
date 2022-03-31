@@ -75,8 +75,8 @@ export class BestRouteService {
     return routes
   }
 
-  async chooseBestRoute(routesInfos, invokeGetAmountsIn) {
-    const bestPath = routesInfos.reduce((prev, current) => {
+  async chooseBestRoute(allRoutesWithAmounts, invokeGetAmountsIn) {
+    const bestPath = allRoutesWithAmounts.reduce((prev, current) => {
       const selectedRouteInfo = invokeGetAmountsIn
         ? prev.finalAmount.lt(current.finalAmount) ||
           (prev.finalAmount.eq(current.finalAmount) && prev.route.length < current.route.length)
