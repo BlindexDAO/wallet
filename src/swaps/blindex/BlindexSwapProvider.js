@@ -238,7 +238,6 @@ class BlindexSwapProvider extends SwapProvider {
     const blockHeight = await client.chain.getBlockHeight()
     const currentBlock = await client.chain.getBlockByNumber(blockHeight)
 
-    const path = this.bestRoute
     const deadline = currentBlock.timestamp + SWAP_DEADLINE
     const minimumOutputInUnit = currencyToUnit(cryptoassets[quote.to], BN(minimumOutput.toExact()))
     const inputAmountHex = ethers.BigNumber.from(BN(quote.fromAmount).toFixed()).toHexString()
@@ -260,14 +259,14 @@ class BlindexSwapProvider extends SwapProvider {
       encodedData = router.interface.encodeFunctionData(swapTokensMethod, [
         inputAmountHex,
         outputAmountHex,
-        path,
+        this.bestRoute,
         toAddress,
         deadline
       ])
     } else {
       encodedData = router.interface.encodeFunctionData('swapExactETHForTokens', [
         outputAmountHex,
-        path,
+        this.bestRoute,
         toAddress,
         deadline
       ])
