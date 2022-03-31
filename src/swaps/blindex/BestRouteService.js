@@ -12,11 +12,7 @@ export class BestRouteService {
 
   async getBestRoute(router, amount, leftTokenAddress, rightTokenAddress) {
     const allRoutes = await this.generateRoutes(leftTokenAddress, rightTokenAddress)
-    const allRoutesWithAmounts = await this.getRoutesWithAmount(
-      router,
-      allRoutes,
-      amount
-    )
+    const allRoutesWithAmounts = await this.getRoutesWithAmount(router, allRoutes, amount)
     const bestRoute = await this.chooseBestRoute(allRoutesWithAmounts)
     return bestRoute
   }
@@ -43,14 +39,21 @@ export class BestRouteService {
     for (const link1 of this.availableLinks) {
       if (link1.from.toLowerCase() === addressInLowercase) {
         for (const link2 of this.availableLinks) {
-          if (link1.to.toLowerCase() === link2.from.toLowerCase() && link2.to.toLowerCase() === addressOutLowercase) {
-              midTokens.push(link1.to.toLowerCase())
+          if (
+            link1.to.toLowerCase() === link2.from.toLowerCase() &&
+            link2.to.toLowerCase() === addressOutLowercase
+          ) {
+            midTokens.push(link1.to.toLowerCase())
           }
         }
       }
     }
     const routes = [...midTokens.map((x) => [addressInLowercase, x, addressOutLowercase])]
-    if (this.availableLinks.some((link) => link.from === addressInLowercase && link.to === addressOutLowercase)) {
+    if (
+      this.availableLinks.some(
+        (link) => link.from === addressInLowercase && link.to === addressOutLowercase
+      )
+    ) {
       routes.push([addressInLowercase, addressOutLowercase])
     }
 
@@ -59,10 +62,11 @@ export class BestRouteService {
 
   async chooseBestRoute(allRoutesWithAmounts) {
     const bestPath = allRoutesWithAmounts.reduce((prev, current) => {
-      const selectedRouteInfo = prev.finalAmount.gt(current.finalAmount) ||
+      const selectedRouteInfo =
+        prev.finalAmount.gt(current.finalAmount) ||
         (prev.finalAmount.eq(current.finalAmount) && prev.route.length < current.route.length)
-      ? prev
-      : current
+          ? prev
+          : current
 
       return selectedRouteInfo
     })

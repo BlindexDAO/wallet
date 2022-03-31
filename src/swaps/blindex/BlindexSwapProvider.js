@@ -29,8 +29,8 @@ class BlindexSwapProvider extends SwapProvider {
     this.bestRouteService = new BestRouteService()
     this.wrbtcAddress = blindexConfig.ERC20_INFO.find((x) => x.symbol === 'WRBTC').address
     this.nativeTokenSymbol = chains[ChainId.Rootstock].nativeAsset //RBTC
-    this.availableTokenSymbols = blindexConfig.ERC20_INFO.map(
-      (entry) => (entry.symbol === 'WRBTC' ? this.nativeTokenSymbol : entry.symbol)
+    this.availableTokenSymbols = blindexConfig.ERC20_INFO.map((entry) =>
+      entry.symbol === 'WRBTC' ? this.nativeTokenSymbol : entry.symbol
     )
   }
 

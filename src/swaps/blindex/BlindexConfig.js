@@ -78,6 +78,6 @@ export const blindexConfig = {
     { address: '0x1D931Bf8656d795E50eF6D639562C5bD8Ac2B78f', symbol: 'ETHs' },
     { address: '0xb5999795BE0EbB5bAb23144AA5FD6A02D080299F', symbol: 'XUSD' },
     { address: '0x99ac494Badd0CBa26143bd423E39A088591C7B09', symbol: 'BDEU' },
-    { address: '0xB450ff06d950eFA9A9c0aD63790C51971C1BE885', symbol: 'BDUS' },
+    { address: '0xB450ff06d950eFA9A9c0aD63790C51971C1BE885', symbol: 'BDUS' }
   ]
 }
