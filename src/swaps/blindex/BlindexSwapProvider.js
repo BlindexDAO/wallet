@@ -229,7 +229,6 @@ class BlindexSwapProvider extends SwapProvider {
     const toChain = cryptoassets[quote.to].chain
     const chainId = ChainNetworks[toChain][network].chainId
 
-    const fromToken = this.getToken(chainId, quote.from)
     const toToken = this.getToken(chainId, quote.to)
 
     const outputAmount = CurrencyAmount.fromRawAmount(toToken, BN(quote.toAmount).toFixed())
@@ -239,7 +238,7 @@ class BlindexSwapProvider extends SwapProvider {
     const blockHeight = await client.chain.getBlockHeight()
     const currentBlock = await client.chain.getBlockByNumber(blockHeight)
 
-    const path = [fromToken.address, toToken.address]
+    const path = this.bestRoute
     const deadline = currentBlock.timestamp + SWAP_DEADLINE
     const minimumOutputInUnit = currencyToUnit(cryptoassets[quote.to], BN(minimumOutput.toExact()))
     const inputAmountHex = ethers.BigNumber.from(BN(quote.fromAmount).toFixed()).toHexString()
@@ -298,11 +297,11 @@ class BlindexSwapProvider extends SwapProvider {
 
   /**
    * Estimate the fees for the given parameters
-   * @param {{ network, walletId, asset, fromAccountId, toAccountId, txType, amount, feePrices[], max }} options
+   * @param {{ network, walletId, asset, fromAccountId, toAccountId, txType, amount, feePrices[] }} options
    * @return Object of key feePrice and value fee
    */
   // eslint-disable-next-line no-unused-vars
-  async estimateFees({ network, walletId, asset, txType, quote, feePrices, max }) {
+  async estimateFees({ network, walletId, asset, txType, quote, feePrices }) {
     if (txType !== BlindexSwapProvider.fromTxType) throw new Error(`Invalid tx type ${txType}`)
 
     const nativeAsset = chains[cryptoassets[asset].chain].nativeAsset
