@@ -22,7 +22,12 @@ export default {
       'ARBETH',
       'FISH',
       'LUNA',
-      'UST'
+      'UST',
+      'BDX',
+      'BDUS',
+      'BDEU',
+      'XUSD',
+      'ETHs'
     ],
     testnet: [
       'BTC',
@@ -78,7 +83,7 @@ export default {
         thornode: 'https://testnet.thornode.thorchain.info'
       },
       sovryn: {
-        name: 'Sovyrn',
+        name: 'Sovryn',
         icon: 'sovryn.svg',
         type: SwapProviderType.SOVRYN,
         routerAddress: SovrynTestnetAddresses.swapNetwork,
@@ -126,7 +131,7 @@ export default {
         bridgeEndpoint: 'http://3.131.33.161:3000/'
       },
       sovryn: {
-        name: 'Sovyrn',
+        name: 'Sovryn',
         icon: 'sovryn.svg',
         type: SwapProviderType.SOVRYN,
         routerAddress: SovrynMainnetAddresses.swapNetwork,
@@ -138,6 +143,12 @@ export default {
         icon: 'thorchain.svg',
         type: SwapProviderType.THORCHAIN,
         thornode: 'https://thornode.thorchain.info'
+      },
+      blindex: {
+        name: 'Blindex',
+        icon: 'blindex.svg',
+        type: SwapProviderType.BLINDEX,
+        routerAddress: '0x102692AbBAB9a1AA75AA78Fff6E23f6ea7b84f61'
       }
     }
   },
