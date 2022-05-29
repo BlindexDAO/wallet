@@ -213,6 +213,14 @@ class OverviewPage {
 
       case 'SOV':
       case 'FISH':
+      case 'BDX':
+      case 'BDUS':
+      case 'BDEU':
+      case 'XUSD':
+      case 'ETHs':
+      case 'bXAU':
+      case 'bGBP':
+      case 'DOC':
       case 'RBTC': {
         const rsk = await page.waitForSelector('#RSK', {
           timeout: elementVisibleTimeout,
